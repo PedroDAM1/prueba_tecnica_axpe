@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Prueba Tecnica Axpe</string>
+
+    <string name="gender_male">Masculino</string>
+    <string name="gender_female">Femenino</string>
+    <string name="not_defined">No definido</string>
+</resources>
