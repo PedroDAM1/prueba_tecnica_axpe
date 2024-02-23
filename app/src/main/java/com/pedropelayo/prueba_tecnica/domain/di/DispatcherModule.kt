@@ -1,4 +1,4 @@
-package com.pedropelayo.prueba_tecnica.data.remote.di
+package com.pedropelayo.prueba_tecnica.domain.di
 
 import com.pedropelayo.prueba_tecnica.data.utils.AppDispatchers
 import com.pedropelayo.prueba_tecnica.data.utils.Dispatcher

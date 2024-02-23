@@ -14,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -43,9 +44,9 @@ class UserRepositoryImpl @Inject constructor (
      * @param page
      * @return
      */
-    private suspend fun fetchUsers(page : Int) : DataResponse<ApiResponseInfo> {
+    private suspend fun fetchUsers(page : Int) : DataResponse<ApiResponseInfo> = withContext(ioDispatcher) {
         val response = service.getUsers(page)
-        return responseMapper.map(response)
+        responseMapper.map(response)
         //return DataResponse.Error(ErrorType.NotFound)
     }
 
