@@ -1,6 +1,7 @@
 package com.pedropelayo.prueba_tecnica.ui.users
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -8,7 +9,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,18 +38,33 @@ import com.pedropelayo.prueba_tecnica.R
 import com.pedropelayo.prueba_tecnica.domain.model.UserModel
 import com.pedropelayo.prueba_tecnica.ui.common.theme.AppColors
 import com.pedropelayo.prueba_tecnica.ui.common.theme.PruebaTecnicaAxpeTheme
+import com.pedropelayo.prueba_tecnica.ui.users.state.UsersPaginatedState
 
 @Composable
 fun UsersScreen(userViewModel : UsersViewModel = viewModel()){
-
+    when(val result =  userViewModel.userResult){
+        is UsersPaginatedState.Error -> TODO()
+        is UsersPaginatedState.Succes -> {
+            UserList(
+                list = result.data,
+                isLoading = userViewModel.isLoading,
+                modifier = Modifier.fillMaxSize()
+            ) { userViewModel.loadMoreItem() }
+        }
+    }
 }
 
 @Composable
 fun UserList(
     list: List<UserModel>,
     modifier: Modifier = Modifier,
+    isLoading : Boolean = false,
     onItemsEnd : () -> Unit
 ){
+    if(isLoading){
+        LoadingCard()
+    }
+
     //Con este podremos mantener el scroll en la lista
     val scrollState = rememberLazyListState()
     //Este estado comporbará si hemos llegaod hasta el final de la lista
@@ -76,6 +94,13 @@ fun UserList(
         }
     }
 
+}
+
+@Composable
+fun LoadingCard(modifier: Modifier = Modifier) {
+    Card(modifier = modifier) {
+        ProgressIndicatorDefaults.CircularIndeterminateStrokeCap
+    }
 }
 
 @Composable
