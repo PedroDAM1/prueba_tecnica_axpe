@@ -65,21 +65,26 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
 
+    //Constraint layout
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+
     //ViewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
 
 
-    //Retrofit
+    //Retrofit -> Cliente para apis
     val retrofitVersion = "2.9.0"
     implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
     implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
-    //DAGGER HILT
+    //DAGGER HILT -> Inyeccion de dependencias
     val daggerVersion = "2.50"
     implementation("com.google.dagger:hilt-android:$daggerVersion")
     kapt("com.google.dagger:hilt-android-compiler:$daggerVersion")
 
+    //Coil -> Carga de imagenes asyncrona
+    implementation("io.coil-kt:coil-compose:2.5.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

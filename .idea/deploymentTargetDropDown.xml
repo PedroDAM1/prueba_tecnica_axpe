@@ -19,7 +19,20 @@
         </State>
       </entry>
       <entry key="clear logcat">
-        <State />
+        <State>
+          <targetSelectedWithDropDown>
+            <Target>
+              <type value="QUICK_BOOT_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\subiy\.android\avd\Pixel_4_API_29.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </targetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-02-24T10:59:48.455429900Z" />
+        </State>
       </entry>
     </value>
   </component>

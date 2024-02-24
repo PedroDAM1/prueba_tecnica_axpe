@@ -16,8 +16,7 @@ class UsersViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(1)
-    val state : StateFlow<Int> = _state
+//    private val _userState : MutableStateFlow<DataResponse<List<>>>
 
     init {
         viewModelScope.launch {

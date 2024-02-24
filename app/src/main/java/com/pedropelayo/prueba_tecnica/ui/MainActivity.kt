@@ -20,15 +20,15 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val vm : UsersViewModel by viewModels()
+//    private val vm : UsersViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        lifecycleScope.launch {
-            vm.state.collect{
-                Log.d("A", "a")
-            }
-        }
+//        lifecycleScope.launch {
+//            vm.state.collect{
+//                Log.d("A", "a")
+//            }
+//        }
         setContent {
 
             PruebaTecnicaAxpeTheme {
