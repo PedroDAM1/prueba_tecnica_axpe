@@ -1,7 +1,6 @@
 package com.pedropelayo.prueba_tecnica.data.remote.model.user
 
 import com.google.gson.annotations.SerializedName
-import com.pedropelayo.prueba_tecnica.domain.model.UserModel
 import java.time.LocalDateTime
 
 
@@ -33,6 +32,10 @@ data class RegisterDate(
 )
 
 data class PictureUser(
+    @SerializedName("large")
+    val large : String,
+    @SerializedName("medium")
+    val medium : String,
     @SerializedName("thumbnail")
     val thumbnail : String
 )

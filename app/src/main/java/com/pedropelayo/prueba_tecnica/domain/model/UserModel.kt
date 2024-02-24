@@ -8,5 +8,6 @@ data class UserModel(
     val email : String,
     val gender : GenderTypes,
     val registrationDate : LocalDateTime,
-    val phone : String
+    val phone : String,
+    val picture: PictureUrlModel
 )

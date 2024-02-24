@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pedropelayo.prueba_tecnica.domain.model.DataResponse
 import com.pedropelayo.prueba_tecnica.domain.repositories.UserRepository
+import com.pedropelayo.prueba_tecnica.ui.users.state.UsersPaginatedState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,6 +18,18 @@ class UsersViewModel @Inject constructor(
 ) : ViewModel() {
 
 //    private val _userState : MutableStateFlow<DataResponse<List<>>>
+    private var pageIndex : Int = 1
+    private val _state : MutableStateFlow<UsersPaginatedState> = MutableStateFlow(UsersPaginatedState.Loading)
+    val state : StateFlow<UsersPaginatedState> = _state
+
+    fun initLoad(){
+
+    }
+
+    fun loadMoreItem(){
+
+
+    }
 
     init {
         viewModelScope.launch {

@@ -1,14 +1,20 @@
 package com.pedropelayo.prueba_tecnica.ui.users
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -26,6 +32,7 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.pedropelayo.prueba_tecnica.R
+import com.pedropelayo.prueba_tecnica.domain.model.UserModel
 import com.pedropelayo.prueba_tecnica.ui.common.theme.AppColors
 import com.pedropelayo.prueba_tecnica.ui.common.theme.PruebaTecnicaAxpeTheme
 
@@ -35,10 +42,47 @@ fun UsersScreen(userViewModel : UsersViewModel = viewModel()){
 }
 
 @Composable
+fun UserList(
+    list: List<UserModel>,
+    modifier: Modifier = Modifier,
+    onItemsEnd : () -> Unit
+){
+    //Con este podremos mantener el scroll en la lista
+    val scrollState = rememberLazyListState()
+    //Este estado comporbará si hemos llegaod hasta el final de la lista
+    val isLastItem by remember {
+        derivedStateOf {
+            scrollState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ==
+                    scrollState.layoutInfo.totalItemsCount - 1
+        }
+    }
+
+    LaunchedEffect(key1 = isLastItem){
+        onItemsEnd()
+    }
+
+    LazyColumn(
+        state = scrollState,
+        modifier = modifier
+    ){
+        itemsIndexed(list){_, user ->
+            val name = "${user.firstName} ${user.lastName}"
+            UserCard(
+                userName = name,
+                userEmail =user.email,
+                //intenta recuperar la url de la imagen del usuario y si no puede cargar un resource por defecto
+                image =user.picture.thumbnail?: user.picture.defaultImage?: painterResource(id = R.drawable.user_ico)
+            )
+        }
+    }
+
+}
+
+@Composable
 fun UserCard(
     userName : String,
     userEmail : String,
-    imageUrl : String,
+    image : Any,
     modifier: Modifier = Modifier,
     onClick : () -> Unit = {},
 ){
@@ -49,7 +93,7 @@ fun UserCard(
     ) {
         val (img, name, email, detail) = createRefs()
         AsyncImage(
-            model = imageUrl,
+            model = image,
             contentDescription = "User Image",
             modifier = Modifier
                 .size(64.dp)
@@ -97,7 +141,7 @@ fun UserCard(
             tint = AppColors.LightGray,
             modifier = Modifier
                 .size(24.dp)
-                .constrainAs(detail){
+                .constrainAs(detail) {
                     start.linkTo(name.end)
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
