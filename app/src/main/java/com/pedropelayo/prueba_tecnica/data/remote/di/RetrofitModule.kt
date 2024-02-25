@@ -1,9 +1,7 @@
 package com.pedropelayo.prueba_tecnica.data.remote.di
 
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.pedropelayo.prueba_tecnica.data.remote.config.LocalDateTimeDeserializer
-import com.pedropelayo.prueba_tecnica.data.remote.config.RetrofitInterceptor
 import com.pedropelayo.prueba_tecnica.data.remote.services.UserService
 import dagger.Module
 import dagger.Provides
@@ -23,7 +21,6 @@ object RetrofitModule {
     @Singleton
     fun provideClient() : OkHttpClient{
         return OkHttpClient.Builder()
-            .addInterceptor(RetrofitInterceptor())
             .build()
     }
 

@@ -1,6 +1,9 @@
 package com.pedropelayo.prueba_tecnica.ui.users
 
+import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -10,6 +13,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
@@ -18,6 +22,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -42,14 +47,26 @@ import com.pedropelayo.prueba_tecnica.ui.users.state.UsersPaginatedState
 
 @Composable
 fun UsersScreen(userViewModel : UsersViewModel = viewModel()){
-    when(val result =  userViewModel.userResult){
-        is UsersPaginatedState.Error -> TODO()
-        is UsersPaginatedState.Succes -> {
-            UserList(
-                list = result.data,
-                isLoading = userViewModel.isLoading,
-                modifier = Modifier.fillMaxSize()
-            ) { userViewModel.loadMoreItem() }
+    Box{
+        if(userViewModel.isLoading){
+            LoadingCard(
+                modifier = Modifier
+                    .align(
+                        Alignment.Center
+                    )
+            )
+        }
+
+        when(val result =  userViewModel.userResult){
+            is UsersPaginatedState.Error -> TODO()
+            is UsersPaginatedState.Succes -> {
+                UserList(
+                    list = result.data,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .align(Alignment.Center)
+                ) { userViewModel.loadMoreItem() }
+            }
         }
     }
 }
@@ -58,12 +75,11 @@ fun UsersScreen(userViewModel : UsersViewModel = viewModel()){
 fun UserList(
     list: List<UserModel>,
     modifier: Modifier = Modifier,
-    isLoading : Boolean = false,
     onItemsEnd : () -> Unit
 ){
-    if(isLoading){
-        LoadingCard()
-    }
+
+    //Si la lista llega vacia, pero sin estado de error es por que es la primera vez que estamos cargando
+    if(list.isEmpty()) onItemsEnd()
 
     //Con este podremos mantener el scroll en la lista
     val scrollState = rememberLazyListState()
@@ -97,9 +113,15 @@ fun UserList(
 }
 
 @Composable
-fun LoadingCard(modifier: Modifier = Modifier) {
+fun LoadingCard(
+    modifier: Modifier = Modifier
+) {
+    Log.d("Cargando", "Estamos cargando el loading card")
     Card(modifier = modifier) {
-        ProgressIndicatorDefaults.CircularIndeterminateStrokeCap
+        CircularProgressIndicator(
+            modifier = Modifier
+                .background(color = Color.Transparent)
+        )
     }
 }
 

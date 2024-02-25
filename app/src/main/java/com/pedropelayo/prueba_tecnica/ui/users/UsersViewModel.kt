@@ -1,6 +1,5 @@
 package com.pedropelayo.prueba_tecnica.ui.users
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -12,6 +11,7 @@ import com.pedropelayo.prueba_tecnica.domain.model.UserModel
 import com.pedropelayo.prueba_tecnica.domain.repositories.UserRepository
 import com.pedropelayo.prueba_tecnica.ui.users.state.UsersPaginatedState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,23 +21,28 @@ class UsersViewModel @Inject constructor(
 ) : ViewModel() {
 
 //    private val _userState : MutableStateFlow<DataResponse<List<>>>
-    private var pageIndex : Int = 1
-    var userResult : UsersPaginatedState by mutableStateOf(UsersPaginatedState.Succes(listOf()))
+    private var pageIndex : Int = 0
+    private var userList : List<UserModel> = listOf()
+
+    var userResult : UsersPaginatedState by mutableStateOf(UsersPaginatedState.Succes(userList))
     var isLoading : Boolean by mutableStateOf(true)
 
-    fun initLoad(){
+    private fun loadData(){
         viewModelScope.launch {
             userRepository.getUsers(pageIndex).collect{ result ->
                 when(result) {
                     is DataResponse.Error -> handleErrorResponse(result.errorType)
-                    is DataResponse.Success -> handleErrorSucces(result.data)
+                    is DataResponse.Success ->{
+                        handleSuccesResponse(result.data)
+                    }
                 }
             }
         }
     }
-
-    private fun handleErrorSucces(data: List<UserModel>) {
-        userResult = UsersPaginatedState.Succes(data)
+    private fun handleSuccesResponse(data: List<UserModel>) {
+        isLoading = false
+        userList = userList.plus(data)
+        userResult = UsersPaginatedState.Succes(userList)
     }
 
     private fun handleErrorResponse(error: ErrorType) {
@@ -50,12 +55,9 @@ class UsersViewModel @Inject constructor(
     }
 
     fun loadMoreItem(){
-
-
-    }
-
-    init {
-        initLoad()
+        isLoading = true
+        pageIndex++
+        loadData()
     }
 
 }
