@@ -77,7 +77,6 @@ fun UserList(
     modifier: Modifier = Modifier,
     onItemsEnd : () -> Unit
 ){
-
     //Si la lista llega vacia, pero sin estado de error es por que es la primera vez que estamos cargando
     if(list.isEmpty()) onItemsEnd()
 
@@ -92,7 +91,8 @@ fun UserList(
     }
 
     LaunchedEffect(key1 = isLastItem){
-        onItemsEnd()
+        //El launched Effect se llama cuando cambia el estado, tanto para true como para false, por lo que deberemos hacer una segunda comprobacion
+        if(isLastItem) onItemsEnd()
     }
 
     LazyColumn(
@@ -123,6 +123,12 @@ fun LoadingCard(
                 .background(color = Color.Transparent)
         )
     }
+}
+
+@Preview
+@Composable
+fun UserCardPreview(){
+    UserCard(userName = "Asdad", userEmail = "asdad", image = painterResource(id = R.drawable.user_ico))
 }
 
 @Composable

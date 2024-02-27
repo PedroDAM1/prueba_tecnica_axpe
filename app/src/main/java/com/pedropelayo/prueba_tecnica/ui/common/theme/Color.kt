@@ -13,6 +13,6 @@ val Pink40 = Color(0xFF7D5260)
 
 object AppColors{
     val Black = Color(0xFF000000)
-    val LightGray = Color(0xFF808080)
+    val LightGray = Color(0xFF949494)
     val WhiteSmoke = Color(0xFFF5F5F5)
 }

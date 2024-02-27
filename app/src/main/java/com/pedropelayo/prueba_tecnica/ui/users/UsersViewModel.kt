@@ -1,5 +1,6 @@
 package com.pedropelayo.prueba_tecnica.ui.users
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -54,10 +55,15 @@ class UsersViewModel @Inject constructor(
         userResult = UsersPaginatedState.Error(errorMsg)
     }
 
+    // TODO: REVISAR POR QUE ESTE METODO SE LLAMA 2 VECES SEGUIDAS EN LUGAR DE 1
+    private var loadMoreItemsCount = 0
+
     fun loadMoreItem(){
+        loadMoreItemsCount++
         isLoading = true
         pageIndex++
         loadData()
+        Log.d("MORE ITEMS", loadMoreItemsCount.toString())
     }
 
 }
