@@ -1,10 +1,8 @@
 package com.pedropelayo.prueba_tecnica.data.repositories
 
-import android.util.Log
 import com.pedropelayo.prueba_tecnica.data.remote.mapper.ResponseMapper
 import com.pedropelayo.prueba_tecnica.data.remote.mapper.UserMapper
 import com.pedropelayo.prueba_tecnica.data.remote.model.user.ApiResponseInfo
-import com.pedropelayo.prueba_tecnica.data.remote.model.user.UserApiModel
 import com.pedropelayo.prueba_tecnica.data.remote.services.UserService
 import com.pedropelayo.prueba_tecnica.data.utils.AppDispatchers
 import com.pedropelayo.prueba_tecnica.data.utils.Dispatcher
@@ -18,7 +16,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
-import retrofit2.Response
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor (
@@ -29,6 +26,17 @@ class UserRepositoryImpl @Inject constructor (
 ) : UserRepository {
 
     private val userCache = mutableSetOf<UserModel>()
+    override fun getUserByUuid(uuid: String): Flow<DataResponse<UserModel>> = flow {
+        //Lo ideal en caso de tenerlo cacheado es buscarlo medianto un map, o buscarlo en la api
+        val user = userCache.find {
+            it.uuid.contentEquals(uuid)
+        }
+        if(user == null){
+            emit(DataResponse.Error(ErrorType.NotFound))
+            return@flow
+        }
+        emit(DataResponse.Success(user))
+    }
 
     override fun getUsers(page: Int): Flow<DataResponse<List<UserModel>>> = flow {
         val responseApi = fetchUsers(page)

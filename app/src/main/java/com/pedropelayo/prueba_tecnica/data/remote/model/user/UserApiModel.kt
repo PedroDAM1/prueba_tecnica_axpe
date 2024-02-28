@@ -16,7 +16,9 @@ data class UserApiModel(
     @SerializedName("phone")
     val phone : String,
     @SerializedName("picture")
-    val picture: PictureUser
+    val picture: PictureUser,
+    @SerializedName("login")
+    val login : Login
 )
 
 data class NameUser(
@@ -38,4 +40,9 @@ data class PictureUser(
     val medium : String,
     @SerializedName("thumbnail")
     val thumbnail : String
+)
+
+data class Login(
+    @SerializedName("uuid")
+    val uuid : String
 )

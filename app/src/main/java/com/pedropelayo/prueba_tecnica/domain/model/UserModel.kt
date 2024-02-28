@@ -9,5 +9,6 @@ data class UserModel(
     val gender : GenderTypes,
     val registrationDate : LocalDateTime,
     val phone : String,
-    val picture: PictureUrlModel
+    val picture: PictureUrlModel,
+    val uuid : String
 )

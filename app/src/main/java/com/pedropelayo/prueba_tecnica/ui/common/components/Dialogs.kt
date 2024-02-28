@@ -52,11 +52,3 @@ fun InputDialog(
         )
     }
 }
-
-
-
-//@Preview(showSystemUi = true)
-//@Composable
-//fun InputDialogPreview(){
-//    InputDialog(showDialog = true, onDismiss = { /*TODO*/ }, onConfirm = {})
-//}

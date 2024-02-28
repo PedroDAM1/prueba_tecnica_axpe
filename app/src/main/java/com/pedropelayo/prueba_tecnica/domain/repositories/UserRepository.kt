@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
 
+    fun getUserByUuid(uuid : String) : Flow<DataResponse<UserModel>>
     fun getUsers(page : Int) : Flow<DataResponse<List<UserModel>>>
     fun searchByName(name : String) : Flow<DataResponse<List<UserModel>>>
     fun searchByEmail(email : String) : Flow<DataResponse<List<UserModel>>>

@@ -26,7 +26,8 @@ class UserMapper : Mapper<UserApiModel, UserModel> {
                 large = item.picture.large,
                 medium = item.picture.medium,
                 thumbnail = item.picture.thumbnail
-            )
+            ),
+            uuid = item.login.uuid
         )
     }
 }
