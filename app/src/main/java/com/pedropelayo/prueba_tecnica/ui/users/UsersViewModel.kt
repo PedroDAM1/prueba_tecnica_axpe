@@ -66,4 +66,12 @@ class UsersViewModel @Inject constructor(
         Log.d("MORE ITEMS", loadMoreItemsCount.toString())
     }
 
+    fun searchByEmail(value: String) {
+
+    }
+
+    fun searchByName(value: String) {
+
+    }
+
 }

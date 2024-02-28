@@ -4,4 +4,12 @@
     <string name="gender_male">Masculino</string>
     <string name="gender_female">Femenino</string>
     <string name="not_defined">No definido</string>
+    <string name="contacts">CONTACTOS</string>
+    <string name="drop_down_menu">Menú desplegable</string>
+    <string name="find_by_email">Buscar por email</string>
+    <string name="find_by_name">Buscar por nombre</string>
+    <string name="confirm">Confirmar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="show_user_detail">Mostrar detalles del usuario</string>
+    <string name="user_image">Imagén del usuario</string>
 </resources>

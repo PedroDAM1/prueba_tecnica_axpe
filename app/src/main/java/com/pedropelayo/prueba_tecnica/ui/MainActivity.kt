@@ -1,20 +1,15 @@
 package com.pedropelayo.prueba_tecnica.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.lifecycleScope
 import com.pedropelayo.prueba_tecnica.ui.common.theme.PruebaTecnicaAxpeTheme
-import com.pedropelayo.prueba_tecnica.ui.users.UsersScreen
-import com.pedropelayo.prueba_tecnica.ui.users.UsersViewModel
+import com.pedropelayo.prueba_tecnica.ui.users.UserScreen.UsersScreen
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
