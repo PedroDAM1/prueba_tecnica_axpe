@@ -83,9 +83,9 @@ object UserScreen{
         }
 
         InputDialog(
-            title = "Filtrar por nombre",
+            title = stringResource(id = R.string.find_by_name),
             showDialog = showDialogName,
-            label = "Nombre",
+            label = stringResource(R.string.name),
             onDismiss = { showDialogName = false },
             onConfirm = { value ->
                 showDialogName = false
@@ -93,9 +93,9 @@ object UserScreen{
             })
 
         InputDialog(
-            title = "Filtrar por email",
+            title = stringResource(id = R.string.find_by_email),
             showDialog = showDialogEmail,
-            label = "Email",
+            label = stringResource(R.string.email),
             onDismiss = { showDialogEmail = false },
             onConfirm = { value ->
                 showDialogEmail = false
@@ -137,7 +137,7 @@ object UserScreen{
         modifier: Modifier = Modifier,
         userViewModel: UsersViewModel,
     ){
-        Box (modifier = modifier){
+        Box (modifier = modifier.fillMaxSize()){
             if(userViewModel.isLoading){
                 LoadingCard(
                     modifier = Modifier
@@ -148,7 +148,9 @@ object UserScreen{
             }
 
             when(val result =  userViewModel.userResult){
-                is UsersPaginatedState.Error -> TODO()
+                is UsersPaginatedState.Error -> {
+                    DisplayError(error = result.message, Modifier.align(Alignment.Center))
+                }
                 is UsersPaginatedState.Succes -> {
                     UserList(
                         list = result.data,
@@ -162,6 +164,11 @@ object UserScreen{
                 }
             }
         }
+    }
+
+    @Composable
+    fun DisplayError(error : String, modifier: Modifier = Modifier){
+        Text(text = error, modifier)
     }
 
     @Composable

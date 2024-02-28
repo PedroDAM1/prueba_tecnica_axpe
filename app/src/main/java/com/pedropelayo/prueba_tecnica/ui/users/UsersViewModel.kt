@@ -69,6 +69,7 @@ class UsersViewModel @Inject constructor(
         flow : Flow<DataResponse<List<UserModel>>>,
         value : String
     ){
+        pageIndex = 0
         if(value.isEmpty()){
             isFiltering = false
             loadMoreItem()
@@ -112,6 +113,8 @@ class UsersViewModel @Inject constructor(
     }
 
     private fun handleErrorResponse(error: ErrorType) {
+        isLoading = false
+        isFiltering = false
         val errorMsg = when(error){
             ErrorType.NotFound -> "No se ha obtenido ningún resultado"
             is ErrorType.UnknowError -> "Ha ocurrido un error desconocido"
