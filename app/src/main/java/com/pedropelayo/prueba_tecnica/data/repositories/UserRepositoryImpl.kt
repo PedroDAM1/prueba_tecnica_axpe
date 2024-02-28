@@ -1,5 +1,6 @@
 package com.pedropelayo.prueba_tecnica.data.repositories
 
+import android.util.Log
 import com.pedropelayo.prueba_tecnica.data.remote.mapper.ResponseMapper
 import com.pedropelayo.prueba_tecnica.data.remote.mapper.UserMapper
 import com.pedropelayo.prueba_tecnica.data.remote.model.user.ApiResponseInfo
@@ -8,6 +9,7 @@ import com.pedropelayo.prueba_tecnica.data.remote.services.UserService
 import com.pedropelayo.prueba_tecnica.data.utils.AppDispatchers
 import com.pedropelayo.prueba_tecnica.data.utils.Dispatcher
 import com.pedropelayo.prueba_tecnica.domain.model.DataResponse
+import com.pedropelayo.prueba_tecnica.domain.model.ErrorType
 import com.pedropelayo.prueba_tecnica.domain.model.UserModel
 import com.pedropelayo.prueba_tecnica.domain.repositories.UserRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -33,6 +35,27 @@ class UserRepositoryImpl @Inject constructor (
         emit(mapUsers(responseApi))
     }.flowOn(Dispatchers.IO)
 
+    override fun searchByName(name: String): Flow<DataResponse<List<UserModel>>> = flow {
+        val filtered = userCache.filter {
+            val userName = "${it.firstName} ${it.lastName}"
+            userName.contains(name, true)
+        }
+        if(filtered.isEmpty())
+            emit(DataResponse.Error(ErrorType.NotFound))
+        else
+            emit(DataResponse.Success(filtered))
+    }
+
+    override fun searchByEmail(email: String): Flow<DataResponse<List<UserModel>>> = flow {
+        val filtered = userCache.filter {
+            it.email.contains(email, true)
+        }
+        if(filtered.isEmpty())
+            emit(DataResponse.Error(ErrorType.NotFound))
+        else
+            emit(DataResponse.Success(filtered))
+    }
+
     private fun mapUsers(responseApi : DataResponse<ApiResponseInfo>) : DataResponse<List<UserModel>>{
         return when(responseApi){
             is DataResponse.Success -> {
@@ -40,8 +63,12 @@ class UserRepositoryImpl @Inject constructor (
                 val domainList = responseApi.data.results.mapNotNull { userApi ->
                     val userDomain = userMapper.map(userApi)
                     //Si el usuario ya lo hemos recuperado, entonces  no lo volvemos a devolver
-                    if(userCache.contains(userDomain)) null
-                    else userDomain
+                    if(userCache.contains(userDomain))null
+                    else {
+                        //Guardamos el usuario en la cache
+                        userCache.add(userDomain)
+                        userDomain
+                    }
                 }
                 DataResponse.Success(domainList)
             }

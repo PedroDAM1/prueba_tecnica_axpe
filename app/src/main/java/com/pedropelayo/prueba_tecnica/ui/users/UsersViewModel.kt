@@ -13,6 +13,8 @@ import com.pedropelayo.prueba_tecnica.domain.repositories.UserRepository
 import com.pedropelayo.prueba_tecnica.ui.users.state.UsersPaginatedState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,19 +29,82 @@ class UsersViewModel @Inject constructor(
 
     var userResult : UsersPaginatedState by mutableStateOf(UsersPaginatedState.Succes(userList))
     var isLoading : Boolean by mutableStateOf(true)
+    //Detectara si estamos filtrando o no para cargar mas elementos
+    var isFiltering : Boolean by mutableStateOf(false)
 
     private fun loadData(){
         viewModelScope.launch {
             userRepository.getUsers(pageIndex).collect{ result ->
-                when(result) {
-                    is DataResponse.Error -> handleErrorResponse(result.errorType)
-                    is DataResponse.Success ->{
-                        handleSuccesResponse(result.data)
-                    }
-                }
+                handleResponse(
+                    response = result,
+                    onError = { handleErrorResponse(it) },
+                    onSuccess = { handleSuccesResponse(it) }
+                )
             }
         }
     }
+
+
+    fun loadMoreItem(){
+        isLoading = true
+        pageIndex++
+        loadData()
+    }
+
+    fun searchByEmail(value: String) {
+        applyFilter(
+            userRepository.searchByEmail(value),
+            value
+        )
+    }
+
+    fun searchByName(value: String) {
+        applyFilter(
+            userRepository.searchByName(value),
+            value
+        )
+    }
+
+    private fun applyFilter(
+        flow : Flow<DataResponse<List<UserModel>>>,
+        value : String
+    ){
+        if(value.isEmpty()){
+            isFiltering = false
+            loadMoreItem()
+            return
+        }
+        viewModelScope.launch {
+            isFiltering = true
+            flow.collect{ response ->
+                handleResponse(
+                    response = response,
+                    onError = { handleErrorResponse(it) },
+                    onSuccess = { handleSuccessFilter(it) }
+                )
+            }
+        }
+    }
+
+    private fun handleResponse(
+        response : DataResponse<List<UserModel>>,
+        onSuccess : (List<UserModel>) -> Unit,
+        onError : (ErrorType) -> Unit,
+    ){
+        when(response) {
+            is DataResponse.Error -> onError(response.errorType)
+            is DataResponse.Success ->{
+                onSuccess(response.data)
+            }
+        }
+    }
+
+    private fun handleSuccessFilter(data : List<UserModel>){
+        isLoading = false
+        userList = data
+        userResult = UsersPaginatedState.Succes(userList)
+    }
+
     private fun handleSuccesResponse(data: List<UserModel>) {
         isLoading = false
         userList = userList.plus(data)
@@ -53,25 +118,6 @@ class UsersViewModel @Inject constructor(
         }
 
         userResult = UsersPaginatedState.Error(errorMsg)
-    }
-
-    // TODO: REVISAR POR QUE ESTE METODO SE LLAMA 2 VECES SEGUIDAS EN LUGAR DE 1
-    private var loadMoreItemsCount = 0
-
-    fun loadMoreItem(){
-        loadMoreItemsCount++
-        isLoading = true
-        pageIndex++
-        loadData()
-        Log.d("MORE ITEMS", loadMoreItemsCount.toString())
-    }
-
-    fun searchByEmail(value: String) {
-
-    }
-
-    fun searchByName(value: String) {
-
     }
 
 }
