@@ -31,11 +31,10 @@ class UserRepositoryImpl @Inject constructor (
         val user = userCache.find {
             it.uuid.contentEquals(uuid)
         }
-        if(user == null){
+        if(user == null)
             emit(DataResponse.Error(ErrorType.NotFound))
-            return@flow
-        }
-        emit(DataResponse.Success(user))
+        else
+            emit(DataResponse.Success(user))
     }
 
     override fun getUsers(page: Int): Flow<DataResponse<List<UserModel>>> = flow {
