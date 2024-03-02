@@ -51,11 +51,14 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.hilt.getViewModel
+import cafe.adriel.voyager.navigator.LocalNavigator
 import coil.compose.AsyncImage
 import com.pedropelayo.prueba_tecnica.R
 import com.pedropelayo.prueba_tecnica.domain.model.UserModel
 import com.pedropelayo.prueba_tecnica.ui.common.components.InputDialog
 import com.pedropelayo.prueba_tecnica.ui.common.theme.AppColors
+import com.pedropelayo.prueba_tecnica.ui.user_detail.UserDetailScreen
+import com.pedropelayo.prueba_tecnica.ui.user_detail.UserDetailViewModel
 import com.pedropelayo.prueba_tecnica.ui.users.state.UsersPaginatedState
 
 class UserScreen : Screen{
@@ -186,6 +189,8 @@ class UserScreen : Screen{
         modifier: Modifier = Modifier,
         onItemsEnd : () -> Unit
     ){
+        val navigator = LocalNavigator.current
+
         //Si la lista llega vacia, pero sin estado de error es por que es la primera vez que estamos cargando
         if(list.isEmpty()) onItemsEnd()
 
@@ -215,7 +220,8 @@ class UserScreen : Screen{
                         userName = name,
                         userEmail =user.email,
                         //intenta recuperar la url de la imagen del usuario y si no puede cargar un resource por defecto
-                        image =user.picture.thumbnail?: user.picture.defaultImage?: painterResource(id = R.drawable.user_ico)
+                        image =user.picture.thumbnail?: user.picture.defaultImage?: painterResource(id = R.drawable.user_ico),
+                        onClick = { navigator?.push(UserDetailScreen(user.uuid)) }
                     )
                     Spacer(modifier = Modifier.size(12.dp))
 
