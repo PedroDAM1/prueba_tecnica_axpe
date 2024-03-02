@@ -43,13 +43,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.hilt.getViewModel
 import coil.compose.AsyncImage
 import com.pedropelayo.prueba_tecnica.R
 import com.pedropelayo.prueba_tecnica.domain.model.UserModel
@@ -57,10 +58,18 @@ import com.pedropelayo.prueba_tecnica.ui.common.components.InputDialog
 import com.pedropelayo.prueba_tecnica.ui.common.theme.AppColors
 import com.pedropelayo.prueba_tecnica.ui.users.state.UsersPaginatedState
 
-object UserScreen{
+class UserScreen : Screen{
+
+    @Composable
+    override fun Content() {
+       val viewModel : UsersViewModel = getViewModel()
+        UsersScreen(viewModel)
+    }
+
+
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun UsersScreen(userViewModel : UsersViewModel = viewModel()){
+    fun UsersScreen(userViewModel : UsersViewModel){
         var showDialogName by remember { mutableStateOf(false) }
         var showDialogEmail by remember { mutableStateOf(false) }
 
@@ -330,12 +339,6 @@ object UserScreen{
             modifier = modifier
         )
     }
-}
 
-@Preview(showSystemUi = true)
-@Composable
-fun UserScreenPreview(){
-//    PruebaTecnicaAxpeTheme {
-        UserScreen.UsersScreen()
-//    }
+
 }

@@ -86,6 +86,15 @@ dependencies {
     //Coil -> Carga de imagenes asyncrona
     implementation("io.coil-kt:coil-compose:2.5.0")
 
+
+    //VOYAGER -> Navegacion compatible con kotlin multiplatform
+    val voyagerVersion = "1.0.0"
+
+    implementation("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
+    implementation("cafe.adriel.voyager:voyager-screenmodel:$voyagerVersion")
+    implementation("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
+    implementation("cafe.adriel.voyager:voyager-hilt:$voyagerVersion")
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
