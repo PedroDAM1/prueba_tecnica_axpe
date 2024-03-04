@@ -1,6 +1,5 @@
 package com.pedropelayo.prueba_tecnica.ui.users
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,8 +14,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.Card
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -48,7 +45,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.hilt.getViewModel
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -56,9 +52,9 @@ import coil.compose.AsyncImage
 import com.pedropelayo.prueba_tecnica.R
 import com.pedropelayo.prueba_tecnica.domain.model.UserModel
 import com.pedropelayo.prueba_tecnica.ui.common.components.InputDialog
+import com.pedropelayo.prueba_tecnica.ui.common.components.LoadingCard
 import com.pedropelayo.prueba_tecnica.ui.common.theme.AppColors
 import com.pedropelayo.prueba_tecnica.ui.user_detail.UserDetailScreen
-import com.pedropelayo.prueba_tecnica.ui.user_detail.UserDetailViewModel
 import com.pedropelayo.prueba_tecnica.ui.users.state.UsersPaginatedState
 
 class UserScreen : Screen{
@@ -238,19 +234,6 @@ class UserScreen : Screen{
             }
         }
 
-    }
-
-    @Composable
-    private fun LoadingCard(
-        modifier: Modifier = Modifier
-    ) {
-        Card(modifier = modifier) {
-            CircularProgressIndicator(
-                modifier = Modifier
-                    .background(color = Color.Transparent)
-                    .padding(24.dp)
-            )
-        }
     }
     @Composable
     private fun UserCard(

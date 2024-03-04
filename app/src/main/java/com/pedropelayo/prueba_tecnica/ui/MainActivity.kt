@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.transitions.SlideTransition
 import com.pedropelayo.prueba_tecnica.ui.common.theme.PruebaTecnicaAxpeTheme
 import com.pedropelayo.prueba_tecnica.ui.users.UserScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,7 +17,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             PruebaTecnicaAxpeTheme {
-                Navigator(UserScreen())
+                Navigator(UserScreen()) {navigator ->
+                    SlideTransition(navigator)
+                }
             }
         }
     }

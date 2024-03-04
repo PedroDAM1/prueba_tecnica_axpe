@@ -3,8 +3,10 @@ package com.pedropelayo.prueba_tecnica.ui.user_detail
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -14,11 +16,13 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -28,16 +32,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.hilt.getViewModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import coil.compose.AsyncImage
 import com.pedropelayo.prueba_tecnica.R
 import com.pedropelayo.prueba_tecnica.domain.model.UserModel
+import com.pedropelayo.prueba_tecnica.domain.utils.extensions.toLocalDateFormat
+import com.pedropelayo.prueba_tecnica.ui.common.components.LoadingCard
 import com.pedropelayo.prueba_tecnica.ui.common.theme.AppColors
 import com.pedropelayo.prueba_tecnica.ui.user_detail.state.UserDetailState
 
@@ -65,18 +71,31 @@ class UserDetailScreen(private val userUuid : String) : Screen{
 
     @Composable
     fun Loading(){
-
+        Box(modifier = Modifier.fillMaxSize()) {
+            LoadingCard(modifier = Modifier.align(Alignment.Center))
+        }
     }
 
     @Composable
     fun Error(msg : String){
 
+        Box (modifier = Modifier.fillMaxSize()){
+            Text(
+                text = msg,
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(24.dp)
+            )
+        }
     }
 
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     private fun UserSuccess(user : UserModel){
+        val navigator = LocalNavigator.current
+
         Scaffold(
             topBar = { TopAppBar(
                 title = { Text(text = "Miriam Sanchez", color = AppColors.WhiteSmoke) },
@@ -84,7 +103,7 @@ class UserDetailScreen(private val userUuid : String) : Screen{
                     containerColor = Color.Transparent
                 ),
                 navigationIcon = {
-                    IconButton(onClick = { }) {
+                    IconButton(onClick = { navigator?.popUntilRoot() }) {
                         Icon(
                             painter = painterResource(id = R.drawable.arrow_back_24),
                             contentDescription = null,
@@ -120,9 +139,9 @@ class UserDetailScreen(private val userUuid : String) : Screen{
             ) {
                 val (image, camera, edit) = createRefs()
 
-                Image(
-                    painter = painterResource(id = R.drawable.user_ico),
-                    contentDescription = null,
+                AsyncImage(
+                    model = user.picture.large?: painterResource(id = R.drawable.user_ico),
+                    contentDescription = stringResource(R.string.profile_user_photo),
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .offset(y = (-36).dp)
@@ -196,17 +215,15 @@ class UserDetailScreen(private val userUuid : String) : Screen{
             UserInfo(
                 iconResource = painterResource(id = R.drawable.calendar_icon),
                 fieldName = stringResource(R.string.registered_date),
-                fieldValue = "Laura Navaroo Martinez",
+                fieldValue = user.registrationDate.toLocalDateFormat(),
                 modifier = Modifier.padding(horizontal = horizontalPadding, vertical = vertialPadding)
             )
             UserInfo(
                 iconResource = painterResource(id = R.drawable.phone_icon),
                 fieldName = stringResource(R.string.phone),
-                fieldValue = "Laura Navaroo Martinez",
+                fieldValue = user.phone,
                 modifier = Modifier.padding(horizontal = horizontalPadding, vertical = vertialPadding)
             )
-
-            // TODO: Implementar la dirección
 
         }
     }

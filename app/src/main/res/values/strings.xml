@@ -18,4 +18,5 @@
     <string name="genre">Género</string>
     <string name="registered_date">Fecha de registro</string>
     <string name="phone">Télefono</string>
+    <string name="profile_user_photo">Foto de perfil del usuario</string>
 </resources>
