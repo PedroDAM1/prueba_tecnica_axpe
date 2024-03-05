@@ -1,5 +1,6 @@
 package com.pedropelayo.prueba_tecnica.domain.di
 
+import com.pedropelayo.prueba_tecnica.data.local.UserCache
 import com.pedropelayo.prueba_tecnica.data.remote.mapper.ResponseMapper
 import com.pedropelayo.prueba_tecnica.data.remote.mapper.UserMapper
 import com.pedropelayo.prueba_tecnica.data.remote.model.user.ApiResponseInfo
@@ -25,10 +26,11 @@ object RepositoriesModule {
         userService: UserService,
         responseMapper: ResponseMapper<ApiResponseInfo>,
         userMapper: UserMapper,
+        userCache: UserCache,
         @Dispatcher(AppDispatchers.IO) ioDispatcher : CoroutineDispatcher
     ) : UserRepository {
         //return UserRepositoryImpl(userService, ioDispatcher)
-        return UserRepositoryImpl(userService, responseMapper, userMapper, ioDispatcher)
+        return UserRepositoryImpl(userService, responseMapper, userMapper, userCache, ioDispatcher)
     }
 
 }
