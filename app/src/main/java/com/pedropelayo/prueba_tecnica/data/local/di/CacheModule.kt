@@ -1,4 +1,4 @@
-package com.pedropelayo.prueba_tecnica.data.di
+package com.pedropelayo.prueba_tecnica.data.local.di
 
 import com.pedropelayo.prueba_tecnica.data.local.UserCache
 import com.pedropelayo.prueba_tecnica.data.local.UserCacheImpl

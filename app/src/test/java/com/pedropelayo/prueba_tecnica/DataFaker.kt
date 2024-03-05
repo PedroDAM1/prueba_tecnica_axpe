@@ -1,4 +1,4 @@
-package com.pedropelayo.prueba_tecnica.data.repositories
+package com.pedropelayo.prueba_tecnica
 
 import com.google.gson.GsonBuilder
 import com.pedropelayo.prueba_tecnica.data.remote.config.LocalDateTimeDeserializer

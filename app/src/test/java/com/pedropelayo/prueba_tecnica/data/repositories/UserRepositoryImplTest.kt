@@ -1,11 +1,11 @@
 package com.pedropelayo.prueba_tecnica.data.repositories
 
+import com.pedropelayo.prueba_tecnica.DataFaker
 import com.pedropelayo.prueba_tecnica.data.local.UserCache
 import com.pedropelayo.prueba_tecnica.data.remote.mapper.ResponseMapper
 import com.pedropelayo.prueba_tecnica.data.remote.mapper.UserMapper
 import com.pedropelayo.prueba_tecnica.data.remote.model.user.ApiResponseInfo
 import com.pedropelayo.prueba_tecnica.data.remote.services.UserService
-import com.pedropelayo.prueba_tecnica.data.utils.AppDispatchers
 import com.pedropelayo.prueba_tecnica.domain.model.DataResponse
 import com.pedropelayo.prueba_tecnica.domain.model.ErrorType
 import com.pedropelayo.prueba_tecnica.domain.model.UserModel
@@ -19,9 +19,7 @@ import io.mockk.verify
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.setMain
 import org.junit.Assert.*
 import org.junit.Before
 
@@ -52,9 +50,11 @@ class UserRepositoryImplTest {
     @Test
     fun `when get users with a correct page should be returns a user success results`() = runBlocking {
         // Given
+        val responseApi = DataFaker.apiResponseInfoFake
+        val correctResponse = DataResponse.Success(listOf(DataFaker.userModelFake))
         val page = 1
-        coEvery { service.getUsers(page) } returns Response.success(DataFaker.apiResponseInfoFake)
-        every { responseMapper.map(any()) } returns DataResponse.Success(DataFaker.apiResponseInfoFake)
+        coEvery { service.getUsers(page) } returns Response.success(responseApi)
+        every { responseMapper.map(any()) } returns DataResponse.Success(responseApi)
         every { userMapper.map(any()) } returns DataFaker.userModelFake
         // When
         val result = userRepository.getUsers(page).first()  // Usar toList para forzar la ejecución de la flow
@@ -62,7 +62,7 @@ class UserRepositoryImplTest {
         // Then
         coVerify(exactly = 1) { service.getUsers(page) }
         verify(exactly = 1) { responseMapper.map(any()) }
-        assertEquals(result, DataResponse.Success(listOf(DataFaker.userModelFake)))
+        assertEquals(correctResponse,result)
     }
 
     @Test
@@ -77,7 +77,7 @@ class UserRepositoryImplTest {
 
         //Then
         coVerify(exactly = 1) { userCache.getUsers() }
-        assertEquals(result, correctResponse)
+        assertEquals(correctResponse,result)
     }
 
     @Test
@@ -85,25 +85,74 @@ class UserRepositoryImplTest {
         //Given
         val uuid = "asdasd"
         val correctResponse = DataResponse.Error<UserModel>(ErrorType.NotFound)
-        coEvery { userCache.getUsers() } returns setOf(DataFaker.userModelFake)
+        coEvery { userCache.getUsers() } returns setOf()
 
         //When
         val result = userRepository.getUserByUuid(uuid).first()
 
         //Then
         coVerify(exactly = 1) { userCache.getUsers() }
-        assertEquals(result, correctResponse)
+        assertEquals(correctResponse, result)
     }
 
     @Test
-    fun getUsers() {
+    fun `when search by name and name exists in cache then should returns a correct result for at least one item `() = runBlocking {
+        //Given
+        val name = "jael"
+        val correctResponse = DataResponse.Success(listOf(DataFaker.userModelFake))
+        coEvery { userCache.getUsers() } returns setOf(DataFaker.userModelFake)
+
+        //When
+        val result = userRepository.searchByName(name).first()
+
+        //Then
+        coVerify(exactly = 1) { userCache.getUsers() }
+        assertEquals(correctResponse,result)
     }
 
     @Test
-    fun searchByName() {
+    fun `when search by name and name not exists in cache then should returns a not found response`() = runBlocking {
+        //Given
+        val name = "not exists"
+        val correctResponse = DataResponse.Error<List<UserModel>>(ErrorType.NotFound)
+        coEvery { userCache.getUsers() } returns setOf(DataFaker.userModelFake)
+
+        //When
+        val result = userRepository.searchByName(name).first()
+
+        //Then
+        coVerify(exactly = 1) { userCache.getUsers() }
+        assertEquals(correctResponse,result)
+    }
+
+
+    @Test
+    fun `when search by email and email exists in cache then should returns a correct result for at least one item `() = runBlocking {
+        //Given
+        val email = "jael.g"
+        val correctResponse = DataResponse.Success(listOf(DataFaker.userModelFake))
+        coEvery { userCache.getUsers() } returns setOf(DataFaker.userModelFake)
+
+        //When
+        val result = userRepository.searchByEmail(email).first()
+
+        //Then
+        coVerify(exactly = 1) { userCache.getUsers() }
+        assertEquals(correctResponse,result)
     }
 
     @Test
-    fun searchByEmail() {
+    fun `when search by email and email not exists in cache then should returns a not found response`() = runBlocking {
+        //Given
+        val email = "not exists"
+        val correctResponse = DataResponse.Error<List<UserModel>>(ErrorType.NotFound)
+        coEvery { userCache.getUsers() } returns setOf(DataFaker.userModelFake)
+
+        //When
+        val result = userRepository.searchByEmail(email).first()
+
+        //Then
+        coVerify(exactly = 1) { userCache.getUsers() }
+        assertEquals(correctResponse,result)
     }
 }
