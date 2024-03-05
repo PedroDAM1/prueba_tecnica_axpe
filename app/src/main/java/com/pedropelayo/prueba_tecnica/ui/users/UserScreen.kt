@@ -56,7 +56,6 @@ import com.pedropelayo.prueba_tecnica.R
 import com.pedropelayo.prueba_tecnica.domain.model.UserModel
 import com.pedropelayo.prueba_tecnica.ui.common.components.InputDialog
 import com.pedropelayo.prueba_tecnica.ui.common.components.LoadingCard
-import com.pedropelayo.prueba_tecnica.ui.common.theme.AppColors
 import com.pedropelayo.prueba_tecnica.ui.user_detail.UserDetailScreen
 import com.pedropelayo.prueba_tecnica.ui.users.state.UsersPaginatedState
 
