@@ -98,7 +98,7 @@ class UserDetailScreen(private val userUuid : String) : Screen{
 
         Scaffold(
             topBar = { TopAppBar(
-                title = { Text(text = "Miriam Sanchez", color = AppColors.WhiteSmoke) },
+                title = { Text(text = "Miriam Sanchez", color = AppColors.WhiteCold) },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Transparent
                 ),
@@ -107,7 +107,7 @@ class UserDetailScreen(private val userUuid : String) : Screen{
                         Icon(
                             painter = painterResource(id = R.drawable.arrow_back_24),
                             contentDescription = null,
-                            tint = AppColors.WhiteSmoke
+                            tint = AppColors.WhiteCold
                         )
                     }
                 }
@@ -147,7 +147,7 @@ class UserDetailScreen(private val userUuid : String) : Screen{
                         .offset(y = (-36).dp)
                         .size(72.dp)
                         .clip(CircleShape)
-                        .border(2.dp, color = AppColors.WhiteSmoke, shape = CircleShape)
+                        .border(2.dp, color = AppColors.WhiteCold, shape = CircleShape)
                         .constrainAs(image) {
                             top.linkTo(parent.top)
                             start.linkTo(parent.start)

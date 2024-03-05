@@ -1,5 +1,6 @@
 package com.pedropelayo.prueba_tecnica.ui.users
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +21,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -40,6 +42,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -59,6 +62,7 @@ import com.pedropelayo.prueba_tecnica.ui.users.state.UsersPaginatedState
 
 class UserScreen : Screen{
 
+    @Preview
     @Composable
     override fun Content() {
        val viewModel : UsersViewModel = getViewModel()
@@ -76,7 +80,7 @@ class UserScreen : Screen{
             topBar = {
                 TopAppBar(
                     title = {
-                        Text(text = stringResource(R.string.contacts), fontWeight = FontWeight.Bold)
+                        Text(text = stringResource(R.string.contacts), fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimary)
                     },
                     actions = {
                         UserMenu(
@@ -208,6 +212,7 @@ class UserScreen : Screen{
         LazyColumn(
             state = scrollState,
             modifier = modifier
+                .background(color = MaterialTheme.colorScheme.surface)
         ){
             itemsIndexed(list){_, user ->
                 Column {
@@ -247,6 +252,7 @@ class UserScreen : Screen{
             .fillMaxWidth()
             .clickable(onClick = onClick)
             .padding(8.dp)
+            .background(color = MaterialTheme.colorScheme.surface)
         ) {
             val (img, name, email, detail) = createRefs()
             AsyncImage(
@@ -280,7 +286,7 @@ class UserScreen : Screen{
             UserInfoText(
                 text = userEmail,
                 fontSize = 16.sp,
-                color = AppColors.LightGray,
+                color = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier
                     .constrainAs(email){
                         start.linkTo(name.start)
@@ -294,7 +300,7 @@ class UserScreen : Screen{
         Icon(
             painter = painterResource(id = R.drawable.arrow_right_24),
             contentDescription = stringResource(R.string.show_user_detail),
-            tint = AppColors.LightGray,
+            tint = MaterialTheme.colorScheme.secondary,
             modifier = Modifier
                 .size(24.dp)
                 .constrainAs(detail) {
@@ -315,7 +321,7 @@ class UserScreen : Screen{
         text : String = "",
         fontSize : TextUnit = 16.sp,
         fontWeight: FontWeight = FontWeight.Normal,
-        color : Color = Color.Black,
+        color : Color = MaterialTheme.colorScheme.onPrimary,
     ){
         Text(
             text = text,
