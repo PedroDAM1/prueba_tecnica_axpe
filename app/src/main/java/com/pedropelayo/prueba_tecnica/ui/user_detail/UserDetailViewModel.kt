@@ -11,8 +11,6 @@ import com.pedropelayo.prueba_tecnica.domain.model.UserModel
 import com.pedropelayo.prueba_tecnica.domain.repositories.UserRepository
 import com.pedropelayo.prueba_tecnica.ui.user_detail.state.UserDetailState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
